@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Formulario con reCAPTCHA</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
+<body class="bg-light py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card shadow">
+          <div class="card-body">
+            <h3 class="card-title mb-4 text-center">Contáctanos</h3>
+            <form id="contactForm" novalidate>
+              <div class="mb-3">
+                <label for="name" class="form-label">Nombre</label>
+                <input type="text" class="form-control" id="name" required>
+              </div>
+              <div class="mb-3">
+                <label for="email" class="form-label">Correo electrónico</label>
+                <input type="email" class="form-control" id="email" required>
+              </div>
+              <div class="mb-3">
+                <label for="message" class="form-label">Mensaje</label>
+                <textarea class="form-control" id="message" rows="5" required></textarea>
+              </div>
+
+              <!-- reCAPTCHA -->
+              <div class="mb-3">
+                <div class="g-recaptcha" data-sitekey="6Lf-6UkrAAAAAH2VJ3FHyCAh_biW-QcpOb5lBGac"></div>
+                <!--<div class="g-recaptcha" data-sitekey='6Le55UkrAAAAAFRO7J4LWpS2hdIyFvu6-1gb2goY'></div>-->
+              </div>
+
+              <div class="d-grid">
+                <button type="submit" class="btn btn-primary">Enviar</button>
+              </div>
+              <div id="formMsg" class="mt-3"></div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('contactForm');
+    const msg = document.getElementById('formMsg');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const message = document.getElementById('message').value.trim();
+      const recaptchaResponse = grecaptcha.getResponse();
+
+      if (!name || !email || !message) {
+        msg.innerHTML = '<div class="alert alert-danger">Por favor completa todos los campos.</div>';
+        return;
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        msg.innerHTML = '<div class="alert alert-danger">Correo electrónico inválido.</div>';
+        return;
+      }
+
+      if (!recaptchaResponse) {
+        msg.innerHTML = '<div class="alert alert-warning">Por favor verifica que no eres un robot.</div>';
+        return;
+      }
+
+      // Simulación de envío exitoso
+      msg.innerHTML = '<div class="alert alert-success">¡Mensaje enviado exitosamente!</div>';
+      form.reset();
+      grecaptcha.reset(); // resetea el captcha
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
