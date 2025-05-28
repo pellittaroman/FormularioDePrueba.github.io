@@ -52,6 +52,8 @@
   <script>
     const form = document.getElementById('contactForm');
     const msg = document.getElementById('formMsg');
+    const scriptURL = "https://script.google.com/macros/s/AKfycbxr_ZNlMH_ImRKPWTuDQrGvtccIuul3Dn_MEA8-W_8wlS-Q3DCt5PkNyDgEnZTCBmBFQg/exec";
+    
 
     form.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -78,6 +80,13 @@
         return;
       }
 
+       const formData = new FormData(form);
+
+      fetch(scriptURL, {
+        method: "POST",
+        body: formData,
+        mode: "no-cors"
+      })
       (function(){
             emailjs.init("gAqXFEni2RO8D15Do"); // Tu clave pública de EmailJS
         })();
